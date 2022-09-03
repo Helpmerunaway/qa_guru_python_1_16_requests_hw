@@ -1,11 +1,9 @@
 import json
 from faker import Faker
-import requests
 import pytest
 
-from schemas.regres import users, morpheus, exact_users, user_data, user_register
+from schemas.regres import users, exact_users, user_data, user_register
 from utils.sessions import regres
-from voluptuous import Schema
 from pytest_voluptuous import S
 
 faker = Faker()
