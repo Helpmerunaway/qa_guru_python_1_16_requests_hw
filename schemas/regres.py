@@ -50,3 +50,17 @@ morpheus = Schema({
     "name": "morpheus",
     "job": "leader"
 })
+
+
+def user_data(name, job):
+    return {
+        "name": name,
+        "job": job
+    }
+
+
+def user_register(email, password):
+    return {
+        "email": email,
+        'password': password
+    }

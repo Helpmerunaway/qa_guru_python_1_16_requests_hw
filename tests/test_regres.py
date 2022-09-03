@@ -1,12 +1,14 @@
 import json
-
+from faker import Faker
 import requests
 import pytest
 
-from schemas.regres import users, morpheus, exact_users
+from schemas.regres import users, morpheus, exact_users, user_data, user_register
 from utils.sessions import regres
 from voluptuous import Schema
 from pytest_voluptuous import S
+
+faker = Faker()
 
 
 def test_users_per_page_count():
@@ -55,24 +57,31 @@ def test_delete_users():
 	assert response.status_code == 204
 
 
+def test_create_faker_user():
+	name = faker.first_name()
+	job = faker.job()
+	payload = user_data(name, job)
+	response = regres().post('/users', data=payload)
+	assert response.status_code == 201, f'Something goes wrong status code is {response.status_code}'
+	assert response.json()['name'] == name
+	assert response.json()['job'] == job
 
 
 @pytest.mark.xfail(reason='Assertion Error')
 def test_register_user():
-	payload = json.dumps({
-		"email": "eve.holt@reqres.in",
-		"password": "pistol"
-})
+	email = "eve.holt@reqres.in"
+	password = "pistol"
+	payload = user_register(email, password)
 	response = regres().post('/register', data=payload, allow_redirects=False)
 	print(response.json())
-	assert response.status_code == 200
+	assert response.status_code == 200, f'Something goes wrong status code is {response.status_code}'
 	assert 'id' and 'token' in response.json()
 
 
 @pytest.mark.xfail(reason='wrong_type')
 def test_fact_fields_validation11():
     response = regres().get("/users/2")
-    assert response.status_code == 200
+    assert response.status_code == 200, f'Something goes wrong status code is {response.status_code}'
     print(response.json())
     assert isinstance(response.json()[{'first_name'}], str)
     assert isinstance(response.json()[{'last_name'}], str)
@@ -105,3 +114,11 @@ def test_missing_email_or_username():
 	print(response.json())
 	assert response.status_code == 400
 	assert response.json()['error'] == 'Missing email or username'
+
+
+def test_negative():
+	response = regres().post('/login')
+	print(response.json())
+	assert response.status_code == 500
+	assert response.json()['error'] == 'Missing email or username'
+	assert 2 + 2 == 5
