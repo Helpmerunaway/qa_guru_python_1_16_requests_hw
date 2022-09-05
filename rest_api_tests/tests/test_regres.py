@@ -1,8 +1,8 @@
 import json
 from faker import Faker
 import pytest
-from data.data import users, exact_users, user_data, user_register
-from utils.sessions import regres
+from rest_api_tests.data.data import users, exact_users, user_data, user_register
+from rest_api_tests.utils.sessions import regres
 from pytest_voluptuous import S
 
 faker = Faker()

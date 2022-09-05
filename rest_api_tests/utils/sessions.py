@@ -1,6 +1,6 @@
 import os
 
-from utils.requests_helper import BaseSession
+from rest_api_tests.utils.requests_helper import BaseSession
 
 # оборачиваем без бейс юрл
 def regres() -> BaseSession:
