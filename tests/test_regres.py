@@ -1,8 +1,7 @@
 import json
 from faker import Faker
 import pytest
-
-from schemas.regres import users, exact_users, user_data, user_register
+from data.data import users, exact_users, user_data, user_register
 from utils.sessions import regres
 from pytest_voluptuous import S
 
@@ -87,13 +86,13 @@ def test_fact_fields_validation11():
 
 def test_fact_fields_exact_validation():
 	response = regres().get('/users/2')
-	# valid schemas
+	# valid data
 	assert S(exact_users) == response.json()
 
 
 def test_fact_fields_validation():
 	response = regres().get('/users/2')
-	# valid schemas
+	# valid data
 	assert S(users) == response.json()
 
 
@@ -113,10 +112,3 @@ def test_missing_email_or_username():
 	assert response.status_code == 400
 	assert response.json()['error'] == 'Missing email or username'
 
-
-def test_negative():
-	response = regres().post('/login')
-	print(response.json())
-	assert response.status_code == 500
-	assert response.json()['error'] == 'Missing email or username'
-	assert 2 + 2 == 5
